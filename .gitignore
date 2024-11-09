@@ -1,0 +1,10 @@
+/.vscode/
+/.idea/
+
+*.log
+*.var
+
+*.iso
+
+/iso/
+/build/
