@@ -1,5 +1,4 @@
 #include "kernel.h"
-#include "shell.h"
 
 void kernel_init() {
     // Initialize VGA text mode
@@ -7,10 +6,6 @@ void kernel_init() {
     
     // Clear screen
     vga_clear_screen();
-
-    // Shell Functions
-    init_shell();
-    run_shell();
 }
 
 void kernel_main() {
