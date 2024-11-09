@@ -10,11 +10,11 @@ LDFLAGS = -m elf_i386 -T scripts/linker.ld
 SRC_DIR = src
 BUILD_DIR = build
 
-# Source files
-C_SRCS = $(wildcard $(SRC_DIR)/*.c)
-ASM_SRCS = $(wildcard $(SRC_DIR)/*.asm)
+# Source files (recursively find all .c and .asm files)
+C_SRCS = $(shell find $(SRC_DIR) -name '*.c')
+ASM_SRCS = $(shell find $(SRC_DIR) -name '*.asm')
 
-# Object files
+# Object files (corresponding object files in the build directory)
 C_OBJS = $(C_SRCS:$(SRC_DIR)/%.c=$(BUILD_DIR)/%.o)
 ASM_OBJS = $(ASM_SRCS:$(SRC_DIR)/%.asm=$(BUILD_DIR)/%.o)
 
@@ -27,11 +27,11 @@ $(BUILD_DIR):
 	mkdir -p iso/boot/grub
 
 # Compile C files
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) $< -o $@
 
 # Compile Assembly files
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.asm
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.asm | $(BUILD_DIR)
 	$(AS) $(ASFLAGS) $< -o $@
 
 # Link kernel
@@ -39,7 +39,7 @@ kernel.bin: $(C_OBJS) $(ASM_OBJS)
 	ld $(LDFLAGS) -o iso/boot/kernel.bin $(C_OBJS) $(ASM_OBJS)
 
 # Create ISO
-zenos.iso: $(BUILD_DIR) kernel.bin
+zenos.iso: kernel.bin
 	cp config/grub.cfg iso/boot/grub/
 	grub-mkrescue -o zenos.iso iso
 
@@ -51,6 +51,6 @@ clean:
 
 # Run in QEMU
 run: zenos.iso
-	qemu-system-i386 -cdrom zenos.iso
+	qemu-system-x86_64 -cdrom zenos.iso
 
 .PHONY: all clean run
