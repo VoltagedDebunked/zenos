@@ -30,13 +30,14 @@ void gdt_init() {
     gdt_set_entry(2, 0, 0xFFFFFFFF, 0x92, 0xCF); // Present, writable
 
     // Load the GDT
-    asm volatile("lgdt %0" : : "m"(gdtp));
+    asm volatile("lgdt (%0)" : : "r"(&gdtp));
     
     // Update segment registers
-    asm volatile("movw $0x10, %ax; movw %ax, %ds"); // Data segment
-    asm volatile("movw $0x10, %ax; movw %ax, %es"); // Extra segment
-    asm volatile("movw $0x10, %ax; movw %ax, %fs"); // FS segment
-    asm volatile("movw $0x10, %ax; movw %ax, %gs"); // GS segment
-    asm volatile("movw $0x08, %ax; movw %ax, %ss"); // Stack segment
-    asm volatile("ljmp $0x08, $1f; 1:"); // Jump to code segment
+    asm volatile("mov $0x10, %%ax; \
+              mov %%ax, %%ds; \
+              mov %%ax, %%es; \
+              mov %%ax, %%fs; \
+              mov %%ax, %%gs; \
+              ljmp $0x08, $next; \
+              next:": : : "eax");
 }
