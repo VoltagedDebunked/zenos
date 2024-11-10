@@ -2,7 +2,7 @@
 CC = gcc
 AS = nasm
 CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
-         -nostartfiles -nodefaultlibs -c -fno-common
+         -nostartfiles -nodefaultlibs -c -fno-common -g3
 ASFLAGS = -f elf32
 LDFLAGS = -m elf_i386 -T scripts/linker.ld --allow-multiple-definition
 

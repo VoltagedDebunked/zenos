@@ -4,23 +4,34 @@
 #include "lib/types.h"
 
 // Page table entry structure
-struct page_table_entry {
-    uint32_t present : 1;  // Page present in memory
-    uint32_t rw : 1;       // Read/Write
-    uint32_t user : 1;     // User/Supervisor
-    uint32_t accessed : 1; // Accessed
-    uint32_t dirty : 1;    // Dirty
-    uint32_t frame : 20;   // Frame address
-} __attribute__((packed));
-
 // Page directory entry structure
 struct page_directory_entry {
-    uint32_t present : 1;  // Page directory present
-    uint32_t rw : 1;       // Read/Write
-    uint32_t user : 1;     // User/Supervisor
-    uint32_t accessed : 1; // Accessed
-    uint32_t reserved : 1; // Reserved
-    uint32_t frame : 20;   // Frame address
+    uint32_t present    : 1;
+    uint32_t rw        : 1;
+    uint32_t user      : 1;
+    uint32_t pwt       : 1;    // Write-through
+    uint32_t pcd       : 1;    // Cache disable
+    uint32_t accessed  : 1;
+    uint32_t reserved  : 1;    // Must be 0
+    uint32_t ps        : 1;    // Page size (0 = 4KB, 1 = 4MB)
+    uint32_t global    : 1;    // Global page
+    uint32_t available : 3;    // Available for system use
+    uint32_t frame     : 20;   // Frame address
+} __attribute__((packed));
+
+// Page table entry structure
+struct page_table_entry {
+    uint32_t present    : 1;
+    uint32_t rw        : 1;
+    uint32_t user      : 1;
+    uint32_t pwt       : 1;    // Write-through
+    uint32_t pcd       : 1;    // Cache disable
+    uint32_t accessed  : 1;
+    uint32_t dirty     : 1;
+    uint32_t pat       : 1;    // Page Attribute Table
+    uint32_t global    : 1;    // Global page
+    uint32_t available : 3;    // Available for system use
+    uint32_t frame     : 20;   // Frame address
 } __attribute__((packed));
 
 // Function prototypes
