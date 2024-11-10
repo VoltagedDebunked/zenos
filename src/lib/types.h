@@ -16,6 +16,8 @@ typedef signed long long    int64_t;
 // Size type
 typedef unsigned int        size_t;
 
+typedef unsigned int uintptr_t;
+
 // Boolean type
 typedef enum {
     false = 0,
@@ -23,5 +25,6 @@ typedef enum {
 } bool;
 
 #define NULL 0
+
 
 #endif // TYPES_H

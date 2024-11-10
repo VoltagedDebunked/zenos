@@ -29,10 +29,10 @@ enum vga_color {
 };
 
 // VGA text buffer pointer
-volatile uint16_t* vga_buffer = (volatile uint16_t*)VGA_BUFFER;
+static volatile uint16_t* vga_buffer = (volatile uint16_t*)VGA_BUFFER;
 
 // Function to initialize VGA
-void vga_init() {
+static void vga_init() {
     // Clear the screen
     for (int y = 0; y < VGA_HEIGHT; y++) {
         for (int x = 0; x < VGA_WIDTH; x++) {
@@ -42,7 +42,7 @@ void vga_init() {
 }
 
 // Function to print a character to the screen
-void vga_put_char(char c, int x, int y, uint8_t color) {
+static void vga_put_char(char c, int x, int y, uint8_t color) {
     vga_buffer[y * VGA_WIDTH + x] = (color << 8) | c;
 }
 
@@ -69,6 +69,25 @@ void print(const char* str) {
         }
         str++;
     }
+}
+
+// Function to convert a number to hex string
+static void hex_to_string(uint32_t value, char* buffer) {
+    static const char hex_digits[] = "0123456789ABCDEF";
+    buffer[0] = '0';
+    buffer[1] = 'x';
+    
+    for (int i = 7; i >= 0; i--) {
+        buffer[2 + (7 - i)] = hex_digits[(value >> (i * 4)) & 0xF];
+    }
+    buffer[10] = '\0';
+}
+
+// Function to print hex value
+void print_hex(uint32_t value) {
+    char buffer[11];  // "0x" + 8 hex digits + null terminator
+    hex_to_string(value, buffer);
+    print(buffer);
 }
 
 #endif // VGA_H

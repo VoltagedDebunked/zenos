@@ -2,9 +2,9 @@
 CC = gcc
 AS = nasm
 CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
-         -nostartfiles -nodefaultlibs -c
+         -nostartfiles -nodefaultlibs -c -fno-common
 ASFLAGS = -f elf32
-LDFLAGS = -m elf_i386 -T scripts/linker.ld
+LDFLAGS = -m elf_i386 -T scripts/linker.ld --allow-multiple-definition
 
 # Directories
 SRC_DIR = src
