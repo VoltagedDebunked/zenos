@@ -47,10 +47,9 @@ static void vga_put_char(char c, int x, int y, uint8_t color) {
 }
 
 // Function to print a string to the screen
-void print(const char* str) {
+void print(const char* str, uint8_t color) {
     static int x = 0;
     static int y = 0;
-    uint8_t color = VGA_COLOR_LIGHT_GREY; // Set default color
 
     while (*str) {
         if (*str == '\n') {
@@ -87,7 +86,16 @@ static void hex_to_string(uint32_t value, char* buffer) {
 void print_hex(uint32_t value) {
     char buffer[11];  // "0x" + 8 hex digits + null terminator
     hex_to_string(value, buffer);
-    print(buffer);
+    print(buffer, VGA_COLOR_WHITE);
+}
+
+void vga_clear_screen() {
+    // Clear the screen by filling the VGA buffer with spaces
+    for (int y = 0; y < VGA_HEIGHT; y++) {
+        for (int x = 0; x < VGA_WIDTH; x++) {
+            vga_buffer[y * VGA_WIDTH + x] = (VGA_COLOR_BLACK << 12) | ' '; // Set background color and clear character
+        }
+    }
 }
 
 #endif // VGA_H

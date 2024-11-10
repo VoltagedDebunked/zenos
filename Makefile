@@ -9,6 +9,7 @@ LDFLAGS = -m elf_i386 -T scripts/linker.ld --allow-multiple-definition
 # Directories
 SRC_DIR = src
 BUILD_DIR = build
+DRIVERS_DIR = $(BUILD_DIR)/drivers  # Add this line
 
 # Source files (recursively find all .c and .asm files)
 C_SRCS = $(shell find $(SRC_DIR) -name '*.c')
@@ -24,6 +25,7 @@ all: zenos.iso
 # Create build directory
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
+	mkdir -p $(DRIVERS_DIR)  # Create drivers directory here
 	mkdir -p iso/boot/grub
 
 # Compile C files

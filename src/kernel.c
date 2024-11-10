@@ -9,6 +9,8 @@
 #include "ioapic.h"
 #include "lapic.h"
 #include "vfs.h"
+#include "drivers/keyboard.h"
+#include "elf.h"
 
 void kernel_main() {
     vga_init();
@@ -21,7 +23,17 @@ void kernel_main() {
     lapic_init();
     vfs_init();
     vmm_init();
-    print("Kernel loaded.");
+    keyboard_init();
+
+    // Create the neccesary FS
+
+    vfs_create_directory("/");
+    vfs_create_directory("/bin/");
+    vfs_create_directory("/home/");
+    vfs_create_directory("/root/");
+    vfs_create_directory("/sbin/");
+    
     while(1) {
+        read_char();
     }
 }
