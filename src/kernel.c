@@ -6,6 +6,7 @@
 #include "pmm.h"
 #include "vmm.h"
 #include "acpi.h"
+#include "ioapic.h"
 
 void kernel_main() {
     gdt_init();
@@ -14,6 +15,7 @@ void kernel_main() {
     pmm_init(1024 * 1024 * 10);
     vmm_init();
     acpi_init();
+    ioapic_init();
     print("Kernel loaded.");
     while(1) {
     }
